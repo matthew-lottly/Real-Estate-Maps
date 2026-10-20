@@ -1,0 +1,9 @@
+[project]
+name = "real-estate-maps"
+version = "0.1.0"
+description = "Publication-quality real estate maps of Houston from public data: a cartographic map composer plus a self-contained interactive explorer"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

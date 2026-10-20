@@ -1,0 +1,9 @@
+geopandas>=0.14
+shapely>=2.0
+pyproj>=3.6
+pandas>=2.0
+numpy>=1.26
+matplotlib>=3.8
+mapclassify>=2.6
+requests>=2.31
+rich>=13.0

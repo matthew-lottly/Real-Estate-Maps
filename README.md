@@ -8,6 +8,12 @@ More: [price per sq ft](output/houston_ppsf.png) · [year-over-year change](outp
 
 Each poster carries the usual map elements: title, stepped legend with ZIP counts per class, north arrow, km and mile scale bars, lat/lon graticule, county and place labels, a highest/lowest ranking keyed to numbered markers on the map, a Texas locator inset, a how-to-read note and a source line.
 
+## Commercial real estate maps
+
+Seven print-ready letter-landscape pages (3300x2550 px, 300 ppi PNG + PDF + layered SVG): regional access, amenities, aerial parcel, demographic rings, neighborhood market, and retail / industrial suitability. See [docs/commercial-maps.md](docs/commercial-maps.md) for what is real data and what is gated (aerial imagery, drive times, demographics, native .ai/.indd/.psd).
+
+![Regional access](output/commercial/sample_site__regional_access.png)
+
 ## Run it
 
 ```bash

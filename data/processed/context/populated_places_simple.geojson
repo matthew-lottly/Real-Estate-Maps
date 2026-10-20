@@ -1,0 +1,24 @@
+{
+"type": "FeatureCollection",
+"name": "populated_places_simple",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "name": "Lake Charles", "pop_max": 83821, "adm1name": "Louisiana" }, "geometry": { "type": "Point", "coordinates": [ -93.217189, 30.226384 ] } },
+{ "type": "Feature", "properties": { "name": "Bryan", "pop_max": 146692, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -96.369684, 30.674186 ] } },
+{ "type": "Feature", "properties": { "name": "Texas City", "pop_max": 69914, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -94.962767, 29.410878 ] } },
+{ "type": "Feature", "properties": { "name": "Pasadena", "pop_max": 628492, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -95.147743, 29.660863 ] } },
+{ "type": "Feature", "properties": { "name": "Baytown", "pop_max": 86034, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -94.967728, 29.755844 ] } },
+{ "type": "Feature", "properties": { "name": "Conroe", "pop_max": 41643, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -95.455864, 30.312063 ] } },
+{ "type": "Feature", "properties": { "name": "Port Arthur", "pop_max": 56945, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -93.928593, 29.898988 ] } },
+{ "type": "Feature", "properties": { "name": "Huntsville", "pop_max": 35590, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -95.550587, 30.723769 ] } },
+{ "type": "Feature", "properties": { "name": "Lufkin", "pop_max": 43264, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -94.72888, 31.338435 ] } },
+{ "type": "Feature", "properties": { "name": "Beaumont", "pop_max": 111485, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -94.101683, 30.086263 ] } },
+{ "type": "Feature", "properties": { "name": "Bay City", "pop_max": 18663, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -95.96436, 28.981111 ] } },
+{ "type": "Feature", "properties": { "name": "Port Lavaca", "pop_max": 11743, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -96.629694, 28.616017 ] } },
+{ "type": "Feature", "properties": { "name": "Temple", "pop_max": 61161, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -97.363008, 31.102093 ] } },
+{ "type": "Feature", "properties": { "name": "Galveston", "pop_max": 68612, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -94.79748, 29.301143 ] } },
+{ "type": "Feature", "properties": { "name": "Freeport", "pop_max": 74892, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -95.356877, 28.959484 ] } },
+{ "type": "Feature", "properties": { "name": "Victoria", "pop_max": 64209, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -97.00334, 28.804998 ] } },
+{ "type": "Feature", "properties": { "name": "Houston", "pop_max": 4459000, "adm1name": "Texas" }, "geometry": { "type": "Point", "coordinates": [ -95.348436, 29.741273 ] } }
+]
+}

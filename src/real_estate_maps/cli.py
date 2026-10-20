@@ -23,7 +23,7 @@ class CommandLineApp:
         sub.add_parser("build-data", help="turn data/raw/ into the small committed files in data/processed/")
         sub.add_parser("build-context", help="download and clip highways, cities, airports and water (Natural Earth) for the commercial maps")
         k = sub.add_parser("commercial", help="render the commercial real estate map set (PNG 3300x2550 @300ppi, PDF, layered SVG)")
-        k.add_argument("--map", default="all", help="regional, amenities, parcel, rings, neighborhood, suitability-retail, suitability-industrial or all")
+        k.add_argument("--map", default="all", help="regional, amenities, parcel, rings, neighborhood, locator, trends, suitability-retail, suitability-industrial or all")
         k.add_argument("--inputs", default="inputs/sample", help="folder with brand.json, amenities.csv, optional demographics.csv / aerial.png+json / parcel.geojson")
         r = sub.add_parser("render", help="render poster maps to output/")
         r.add_argument("--metric", default="price", help=f"one of {', '.join(MetricRegistry.keys())} or 'all'")
@@ -70,7 +70,9 @@ class CommandLineApp:
         from .commercial.providers import ImageFileImagery
         from .commercial.regional import RegionalAccessMap
         from .commercial.rings import DemographicRingsMap
+        from .commercial.locator import SiteLocatorMap
         from .commercial.suitability import SuitabilityMap
+        from .commercial.trends import MarketTrendsMap
 
         folder = Path(a.inputs)
         brand = Brand.load(folder / "brand.json") if (folder / "brand.json").exists() else Brand()
@@ -78,7 +80,7 @@ class CommandLineApp:
         site = Site.from_geojson("Subject Site", "Address from client", parcel) if parcel.exists() else SampleSite.make()
         amen = AmenityList.load(folder / "amenities.csv") if (folder / "amenities.csv").exists() else []
         ctx = MapContext(brand, site, amen, DemographicProvider(folder / "demographics.csv"), ImageFileImagery.find(folder), paths=paths)
-        maps = {"regional": RegionalAccessMap, "amenities": AmenityMap, "parcel": AerialParcelMap, "rings": DemographicRingsMap, "neighborhood": NeighborhoodMap,
+        maps = {"regional": RegionalAccessMap, "amenities": AmenityMap, "parcel": AerialParcelMap, "rings": DemographicRingsMap, "neighborhood": NeighborhoodMap, "locator": SiteLocatorMap, "trends": MarketTrendsMap,
                 "suitability-retail": lambda c: SuitabilityMap(c, "retail"), "suitability-industrial": lambda c: SuitabilityMap(c, "industrial")}
         for k in (maps if a.map == "all" else [a.map]):
             out = maps[k](ctx).export(paths.output / "commercial")

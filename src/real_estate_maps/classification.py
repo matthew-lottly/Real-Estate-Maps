@@ -54,6 +54,12 @@ class Classifier(abc.ABC):
 
     def _label(self, e: list[float], i: int) -> str:
         f = self.m.short
+        if e[0] < 0:
+            if i == 0:
+                return f"below {f(e[1])}"
+            if i == len(e) - 2:
+                return f"above {f(e[i])}"
+            return f"{f(e[i])} to {f(e[i + 1])}"
         if i == 0:
             return f"< {f(e[1])}"
         if i == len(e) - 2:

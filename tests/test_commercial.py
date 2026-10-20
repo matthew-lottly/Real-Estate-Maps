@@ -20,10 +20,10 @@ def test_sample_parcel_geometry():
     assert s.acres == pytest.approx(330 * 470 / 43560, rel=0.01)
 
 
-@pytest.mark.parametrize("name", ["RegionalAccessMap", "DemographicRingsMap", "AerialParcelMap"])
+@pytest.mark.parametrize("name", ["RegionalAccessMap", "DemographicRingsMap", "AerialParcelMap", "SiteLocatorMap", "MarketTrendsMap"])
 def test_export_is_print_spec(ctx, tmp_path, name):
     import importlib
-    mod = {"RegionalAccessMap": "regional", "DemographicRingsMap": "rings", "AerialParcelMap": "parcel"}[name]
+    mod = {"RegionalAccessMap": "regional", "DemographicRingsMap": "rings", "AerialParcelMap": "parcel", "SiteLocatorMap": "locator", "MarketTrendsMap": "trends"}[name]
     out = getattr(importlib.import_module(f"real_estate_maps.commercial.{mod}"), name)(ctx).export(tmp_path)
     im = Image.open(out["png"])
     assert im.size == (3300, 2550)

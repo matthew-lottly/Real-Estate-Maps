@@ -10,7 +10,7 @@ Each poster carries the usual map elements: title, stepped legend with ZIP count
 
 ## Commercial real estate maps
 
-Seven print-ready letter-landscape pages (3300x2550 px, 300 ppi PNG + PDF + layered SVG): regional access, amenities, aerial parcel, demographic rings, neighborhood market, and retail / industrial suitability. See [docs/commercial-maps.md](docs/commercial-maps.md) for what is real data and what is gated (aerial imagery, drive times, demographics, native .ai/.indd/.psd).
+Nine print-ready letter-landscape pages (3300x2550 px, 300 ppi PNG + PDF + layered SVG): regional access, amenities, aerial parcel, demographic rings, neighborhood market, site locator, market momentum, and retail / industrial suitability. See [docs/commercial-maps.md](docs/commercial-maps.md) for what is real data and what is gated (aerial imagery, drive times, demographics, native .ai/.indd/.psd).
 
 ![Regional access](output/commercial/sample_site__regional_access.png)
 

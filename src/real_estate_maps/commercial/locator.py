@@ -9,7 +9,7 @@ from shapely.ops import unary_union
 from .base import BaseMap, CommercialMap
 from .page import Page, halo
 
-SRC = ("Highways, cities and water: Natural Earth (public domain), generalized. State and county outlines: public county boundaries; ZIP outlines: Census 2010 ZCTAs. "
+SRC = ("Streets: Overture Maps (release 2026-09-23.1); water and the inset highways: Natural Earth, generalized; state outline: public county boundaries. "
        "Frames show the extent of the next map in the series.")
 
 
@@ -24,8 +24,7 @@ class SiteLocatorMap(CommercialMap):
         ax = pg.map_axes((0.03, 0.07, 0.64, 0.835), c.site.xy, 36_000)
         base = BaseMap(c, pg)
         base.water_land(ax, counties=False)
-        base.outlines(ax)
-        base.roads(ax, scale=1.15)
+        base.streets(ax)
         x0, y0, x1, y1 = pg.extent(ax)
         with pg.layer("city-labels", ax):
             for _, r in c.places.iterrows():

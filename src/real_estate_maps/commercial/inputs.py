@@ -110,3 +110,48 @@ class DemographicProvider:
 
     def get(self, ring: int) -> dict[str, str]:
         return self.rows.get(ring, {})
+
+
+class OvertureAmenities:
+    """Nearest real businesses and parks around a site, from the Overture places file. Names and coordinates are as published; verify before print."""
+
+    PICKS = {"retail": ("shopping", 4), "restaurant": ("food_and_drink", 4), "employer": ("services_and_business", 3), "health": ("health_care", 2), "park": (None, 2)}
+
+    @staticmethod
+    def around(site: Site, raw: Path, radius_km: float = 3.5) -> list[Amenity]:
+        import pyarrow.parquet as pq
+        from shapely import wkb
+        t = pq.read_table(raw / "overture" / "places_houston.parquet", columns=["names", "taxonomy", "basic_category", "brand", "confidence", "operating_status", "geometry"]).to_pandas()
+        t = t[(t["operating_status"] == "open") & (t["confidence"] >= 0.8)].copy()
+        pts = [wkb.loads(b) for b in t["geometry"]]
+        t["x"], t["y"] = zip(*[to_xy(p.x, p.y) for p in pts])
+        sx, sy = site.xy
+        t["d"] = np.hypot(t["x"] - sx, t["y"] - sy)
+        t = t[t["d"] < radius_km * 1000]
+        t["grp"] = t["taxonomy"].map(lambda x: x["hierarchy"][0] if x is not None and len(x["hierarchy"]) else None)
+        t["prim"] = t["taxonomy"].map(lambda x: x["primary"] if x is not None else None)
+        t["name"] = t["names"].map(lambda n: n["primary"] if n is not None else None)
+        t["branded"] = t["brand"].notna()
+        out, seen = [], set()
+        for cat, (grp, n) in OvertureAmenities.PICKS.items():
+            if cat == "park":
+                sub = t[t["prim"].isin(["park", "dog_park", "playground", "nature_reserve"])]
+            elif cat == "employer":
+                sub = t[t["basic_category"].isin(["corporate_or_business_office"]) & t["branded"]]
+            elif cat == "health":
+                sub = t[t["basic_category"].isin(["hospital", "medical_center"])]
+            else:
+                sub = t[(t["grp"] == grp) & t["branded"]]
+            sub = sub[sub["name"].notna()].sort_values("d")
+            k = 0
+            for _, r in sub.iterrows():
+                key = r["name"].lower()
+                if key in seen:
+                    continue
+                seen.add(key)
+                lon, lat = to_lonlat(r["x"], r["y"])
+                out.append(Amenity(r["name"], cat, lon, lat, None, f"Overture, confidence {r['confidence']:.2f}"))
+                k += 1
+                if k >= n:
+                    break
+        return out

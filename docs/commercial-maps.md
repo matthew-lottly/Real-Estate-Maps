@@ -4,7 +4,7 @@ Built for a marketing studio that produces offering memorandums, brochures and f
 
 ```bash
 python -m real_estate_maps build-context          # one time: highways, cities, airports, water
-python -m real_estate_maps commercial             # all nine maps from inputs/sample
+python -m real_estate_maps commercial             # all thirteen maps from inputs/sample
 python -m real_estate_maps commercial --inputs path/to/client_folder --map rings
 ```
 
@@ -13,12 +13,13 @@ python -m real_estate_maps commercial --inputs path/to/client_folder --map rings
 | Key | Map | Real data used | What is gated |
 |---|---|---|---|
 | `regional` | Regional access | Natural Earth highways/cities/airports/Gulf; straight-line distances | Drive times (no routing service reachable). `DriveTimeProvider` is the plug-in point. Highways are generalized majors only. |
-| `amenities` | Amenity map | Client CSV (`name,category,lon,lat,logo`) | Logos: supplied PNGs used, otherwise monogram badge. Sample list: 3 retail centers + 1 park with approximate coordinates; restaurants and employers are labelled samples. No street-level roads. |
+| `amenities` | Amenity map | Client CSV (`name,category,lon,lat,logo`) | Logos: supplied PNGs used, otherwise monogram badge. Nearest real businesses from Overture Maps; verify against the broker's list. Real streets and POIs from Overture Maps. |
 | `parcel` | Aerial parcel | Parcel polygon -> acreage and side lengths computed from geometry | Aerial imagery not bundled; placeholder is stamped. Drop `aerial.png` + `aerial.json` (WGS84 bounds) in the inputs folder. Demo parcel is synthetic. |
 | `rings` | Demographic rings | 1/3/5 mi rings; Redfin ZIP stats area-apportioned (homes sold, weighted price, sales volume, vs metro) | Population/households/income need a client extract (`demographics.csv`: `ring_miles,metric,value`). None bundled. |
 | `neighborhood` | Neighborhood market | Redfin median price by ZIP, labelled | ZIP is the finest level in this data, not neighborhood boundaries. |
 | `locator` | Site location (market area + metro + Texas frames) | Natural Earth highways/water, county and ZIP outlines | Generalized roads only; no street basemap. |
 | `trends` | Market momentum | Redfin YoY by ZIP + five-year price paths (4-window average) for the 4 nearest ZIPs vs metro | Small-ZIP series are noisy; housing data, not commercial rents. |
+| `forecast-24`, `forecast-12`, `risk-return`, `evidence` | Investor forecast set | Walk-forward ZIP forecast of relative price growth with ranges, risk-return quadrants, backtest evidence | See [investor-forecast.md](investor-forecast.md): modest edge, price-only, no rents or flood data. |
 | `suitability-retail`, `suitability-industrial` | Suitability screening | Weighted overlay of percentile-ranked ZIP housing factors + distance to highways/airports | Housing-market proxies, not rents, zoning or flood. Weights are editable `Profile`s. |
 
 ## Inputs a client supplies

@@ -24,7 +24,7 @@ class Brand:
     body_fonts: tuple[str, ...] = ("Inter", "Helvetica Neue", "Arial", "DejaVu Sans")
     logo: str | None = None            # path to a PNG, relative to the brand file
     sample: bool = True                # the built-in kit is a stand-in; real client kits set this False
-    categories: dict = field(default_factory=lambda: {"retail": "#C9A24B", "restaurant": "#D1493B", "employer": "#1F8A8A", "park": "#5B9A5B", "transit": "#6C55A2"})
+    categories: dict = field(default_factory=lambda: {"retail": "#C9A24B", "restaurant": "#D1493B", "employer": "#1F8A8A", "park": "#5B9A5B", "transit": "#6C55A2", "health": "#6C55A2"})
 
     @staticmethod
     def _pick(stack) -> str:

@@ -9,7 +9,7 @@ from .inputs import M_PER_MI
 from .page import Page, halo
 
 SRC = ("Housing-market figures: Redfin Data Center ZIP-code tracker, all residential, 3 months ending {end}. ZIP values are apportioned to each ring by area overlap (assumes sales are spread evenly across a ZIP), "
-       "so they are estimates; the price is a sales-weighted average of ZIP medians, not a true ring median. ZIP areas are Census 2010 ZCTAs. "
+       "so they are estimates; the price is a sales-weighted average of ZIP medians, not a true ring median. ZIP areas are Census 2010 ZCTAs; streets: Overture Maps. "
        "Population, household and income figures appear only when a demographic extract is supplied (inputs/demographics.csv); none is bundled.")
 
 
@@ -44,6 +44,7 @@ class DemographicRingsMap(CommercialMap):
             c.zips.boundary.plot(ax=ax, color="#BDB6A8", lw=0.5, zorder=2)
         tints = {5: b.secondary, 3: b.secondary, 1: b.secondary}
         alphas = {5: 0.10, 3: 0.14, 1: 0.20}
+        base.streets(ax, label=False)
         with pg.layer("rings", ax):
             for mi in sorted(self.RINGS, reverse=True):
                 ax.add_patch(Circle((sx, sy), mi * M_PER_MI, fc=tints[mi], alpha=alphas[mi], ec="none", zorder=4))

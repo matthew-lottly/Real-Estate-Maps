@@ -10,9 +10,11 @@ Each poster carries the usual map elements: title, stepped legend with ZIP count
 
 ## Commercial real estate maps
 
-Nine print-ready letter-landscape pages (3300x2550 px, 300 ppi PNG + PDF + layered SVG): regional access, amenities, aerial parcel, demographic rings, neighborhood market, site locator, market momentum, and retail / industrial suitability. See [docs/commercial-maps.md](docs/commercial-maps.md) for what is real data and what is gated (aerial imagery, drive times, demographics, native .ai/.indd/.psd).
+Thirteen print-ready letter-landscape pages (3300x2550 px, 300 ppi PNG + PDF + layered SVG): regional access, amenities, aerial parcel, demographic rings, neighborhood market, site locator, market momentum, retail / industrial suitability, and an investor forecast set (forecast map, risk-return map, backtest evidence page). See [docs/commercial-maps.md](docs/commercial-maps.md) for what is real data and what is gated (aerial imagery, drive times, demographics, native .ai/.indd/.psd).
 
-![Regional access](output/commercial/sample_site__regional_access.png)
+![Investor forecast](output/commercial/sample_site__investor_forecast_24m.png)
+
+The forecast is a walk-forward, out-of-time tested ranking of ZIPs (see [docs/investor-forecast.md](docs/investor-forecast.md)): a modest edge that tilts the odds, not a guarantee.
 
 ## Run it
 

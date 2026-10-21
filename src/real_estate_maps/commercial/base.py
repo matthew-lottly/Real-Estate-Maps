@@ -81,6 +81,11 @@ class BaseMap:
             if counties:
                 self.c.counties.boundary.plot(ax=ax, color="#C9C3B6", lw=0.5, ls="--", zorder=1.5)
 
+    def streets(self, ax, label: bool = True) -> None:
+        """Real streets (Overture Maps), detail chosen from the map scale."""
+        from .streets import OvertureStreets
+        OvertureStreets(self.c.paths.raw).draw(self.p, ax, self.c.brand, label)
+
     def outlines(self, ax) -> None:
         """Local-scale context: ZIP outlines. (The only road source here is generalized highways, which would mislead at this zoom.)"""
         with self.p.layer("zip-outlines", ax):

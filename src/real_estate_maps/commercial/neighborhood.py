@@ -12,7 +12,7 @@ from .inputs import to_xy
 from .page import Page, halo
 
 SRC = ("Median sale price: Redfin Data Center ZIP-code tracker, all residential, rolling 3 months ending {end}. Areas are ZIP codes (Census 2010 ZCTAs), the finest level this data supports — not neighborhood "
-       "boundaries. ZIPs with fewer than 10 sales are hatched. Street-level roads are not shown (no suitable open source in this build).")
+       "boundaries. ZIPs with fewer than 10 sales are hatched. Streets: Overture Maps.")
 
 
 class NeighborhoodMap(CommercialMap):
@@ -37,6 +37,7 @@ class NeighborhoodMap(CommercialMap):
             if len(nd):
                 nd.plot(ax=ax, fc="#E4E6E9", ec="#B3BAC3", hatch="////", lw=0.3, zorder=2)
                 nd.boundary.plot(ax=ax, color="white", lw=0.9, zorder=2.1)
+        base.streets(ax, label=False)
         x0, y0, x1, y1 = pg.extent(ax)
         view = box(x0, y0, x1, y1).buffer(-0.04 * (x1 - x0))
         rows = []

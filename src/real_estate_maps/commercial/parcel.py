@@ -65,8 +65,7 @@ class AerialParcelMap(CommercialMap):
         pan.text(0.06, 0.715, "ACRES (from boundary geometry)", fontsize=5.8, color=b.muted, fontweight="bold", va="top", transform=pan.transAxes)
         y = 0.64
         for i, t in enumerate(s.callouts, 1):
-            pan.add_patch(Circle((0.085, y), 0.026, fc=b.primary, ec="none", transform=pan.transAxes))
-            pan.text(0.085, y, str(i), fontsize=7, color="white", fontweight="bold", ha="center", va="center", transform=pan.transAxes)
+            pg.dot(pan, 0.085, y, str(i), b.primary, 11, 7)
             pan.text(0.16, y, t, fontsize=7.4, color=b.ink, va="center", transform=pan.transAxes)
             y -= 0.075
         return pg

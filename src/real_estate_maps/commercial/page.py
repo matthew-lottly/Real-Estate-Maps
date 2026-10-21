@@ -152,9 +152,16 @@ class Page:
         a.set_axis_off()
         a.add_patch(Rectangle((0, 0), 1, 1, fc="#F7F8FA", ec=self.brand.primary, lw=0.7, transform=a.transAxes))
         if title:
-            a.add_patch(Rectangle((0, 0.94), 1, 0.06, fc=self.brand.primary, ec="none", transform=a.transAxes))
-            a.text(0.04, 0.97, title.upper(), color="white", fontsize=7.2, fontweight="bold", family=self.brand.heading, va="center", transform=a.transAxes)
+            hh = 0.30 / (rect[3] * H_IN)                      # header band is 0.30 in tall whatever the panel height
+            a.add_patch(Rectangle((0, 1 - hh), 1, hh, fc=self.brand.primary, ec="none", transform=a.transAxes))
+            a.text(0.04, 1 - hh / 2, title.upper(), color="white", fontsize=7.2, fontweight="bold", family=self.brand.heading, va="center", transform=a.transAxes)
         return a
+
+    @staticmethod
+    def dot(ax, x: float, y: float, text: str, color: str, ms: float = 9.5, fs: float = 6.0) -> None:
+        """Round numbered dot in axes coordinates (a Circle patch would stretch to an ellipse on a non-square panel)."""
+        ax.plot([x], [y], marker="o", ms=ms, color=color, mec="none", ls="none", transform=ax.transAxes, clip_on=False)
+        ax.text(x, y, text, fontsize=fs, color="white", fontweight="bold", ha="center", va="center", transform=ax.transAxes)
 
     # ---- output ----
     def export(self, outdir: Path, stem: str) -> dict[str, Path]:

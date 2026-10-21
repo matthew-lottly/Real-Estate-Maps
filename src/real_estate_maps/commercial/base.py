@@ -81,10 +81,10 @@ class BaseMap:
             if counties:
                 self.c.counties.boundary.plot(ax=ax, color="#C9C3B6", lw=0.5, ls="--", zorder=1.5)
 
-    def streets(self, ax, label: bool = True) -> None:
-        """Real streets (Overture Maps), detail chosen from the map scale."""
+    def streets(self, ax, label: bool = True, light: bool = False) -> None:
+        """Real streets (Overture Maps), detail chosen from the map scale; `light` keeps only the main roads for use under a choropleth."""
         from .streets import OvertureStreets
-        OvertureStreets(self.c.paths.raw).draw(self.p, ax, self.c.brand, label)
+        OvertureStreets(self.c.paths.raw).draw(self.p, ax, self.c.brand, label, light)
 
     def outlines(self, ax) -> None:
         """Local-scale context: ZIP outlines. (The only road source here is generalized highways, which would mislead at this zoom.)"""
@@ -149,7 +149,10 @@ class CommercialMap(abc.ABC):
     def build(self) -> Page: ...
 
     def export(self, outdir: Path) -> dict[str, Path]:
-        return self.build().export(outdir, f"{self.c.site.name.lower().replace(' ', '_')}__{self.key}")
+        pg = self.build()
+        out = pg.export(outdir, f"{self.c.site.name.lower().replace(' ', '_')}__{self.key}")
+        out["issues"] = pg.issues
+        return out
 
 
 def miles_between(a, b) -> float:

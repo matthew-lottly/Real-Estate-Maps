@@ -51,7 +51,7 @@ class CountyLabels(MapElement):
         for name, (lon, lat) in self.AT.items():
             x, y = c.to_xy(lon, lat)
             c.ax.text(x, y, f"{name.upper()} COUNTY", ha="center", va="center", fontsize=8.5, color=c.theme.muted, alpha=0.6,
-                      fontweight="bold", zorder=4, style="italic", path_effects=halo(c.theme.land, 2.5))
+                      fontweight="bold", zorder=4, style="italic", path_effects=halo("white", 1.6))
 
 
 class PlaceLabels(MapElement):
@@ -69,8 +69,9 @@ class PlaceLabels(MapElement):
             c.ax.plot(x, y, marker="o" if rank < 3 else "s" if "Airport" not in name else "P", markersize=7.5 if big else 5, mfc="white" if rank < 3 else c.theme.ink,
                       mec=c.theme.ink, mew=1.3, zorder=6)
             dx = 700 if "Airport" not in name else 700
-            c.ax.text(x + dx, y + 450, name, fontsize=13 if big else 9.5 if rank == 2 else 7.6, fontweight="bold" if rank < 3 else "normal",
-                      color=c.theme.ink if rank < 3 else c.theme.muted, ha="left", va="bottom", zorder=7, path_effects=halo(w=3.2),
+            left = name == "Galleria"                         # sits under the numbered rank markers, so label it on the left
+            c.ax.text(x - dx if left else x + dx, y + 450, name.replace("George Bush Intercontinental Airport", "IAH Airport").replace("William P. Hobby Airport", "Hobby Airport"), fontsize=13 if big else 9.5 if rank == 2 else 7.6, fontweight="bold" if rank < 3 else "normal",
+                      color=c.theme.ink if rank < 3 else c.theme.muted, ha="right" if left else "left", va="bottom", zorder=7, path_effects=halo(w=3.2),
                       style="normal" if rank < 3 else "italic")
 
 

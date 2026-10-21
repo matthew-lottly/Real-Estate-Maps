@@ -29,7 +29,7 @@ class SiteLocatorMap(CommercialMap):
         with pg.layer("city-labels", ax):
             for _, r in c.places.iterrows():
                 if x0 < r.geometry.x < x1 and y0 < r.geometry.y < y1 and r["pop_max"] > 100000:
-                    ax.annotate(r["name"].upper(), (r.geometry.x, r.geometry.y), xytext=(0, 0), ha="center", fontsize=9, color=b.muted, fontweight="bold", alpha=0.8, path_effects=halo())
+                    ax.annotate(r["name"].upper(), (r.geometry.x, r.geometry.y), xytext=(0, 0), textcoords="offset points", ha="center", fontsize=9, color=b.muted, fontweight="bold", alpha=0.8, path_effects=halo())
         pg.site_pin(ax, c.site.xy, c.site.name, dx=10, dy=-18)
         pg.north_arrow(ax)
         pg.scale_bar(ax)
@@ -50,7 +50,7 @@ class SiteLocatorMap(CommercialMap):
         BaseMap(c, pg).roads(panel, label=False, scale=0.55)
         panel.add_patch(Rectangle((frame[0], frame[1]), frame[2] - frame[0], frame[3] - frame[1], fc="none", ec=b.alert, lw=1.4, zorder=20))
         panel.plot(*c.site.xy, marker="*", ms=9, mfc=b.alert, mec="white", zorder=21)
-        panel.text(0.05, 0.94, "HOUSTON METRO", transform=panel.transAxes, fontsize=6.5, fontweight="bold", color=b.primary, va="top", path_effects=halo())
+        panel.text(0.05, 0.94, "HOUSTON METRO", transform=panel.transAxes, fontsize=6.5, fontweight="bold", color=b.primary, va="top", bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=0.9))
         for s in panel.spines.values():
             s.set_edgecolor(b.primary)
         # Texas inset

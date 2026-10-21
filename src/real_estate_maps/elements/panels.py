@@ -92,7 +92,7 @@ class RankingPanel(MapElement):
             y -= 0.07
             for r in items:
                 col = c.scheme.colors[r.cls] if r.cls >= 0 else t.faint
-                a.add_patch(Circle((0.025, y - 0.03), 0.022, transform=a.transAxes, facecolor=t.ink if filled else "white", edgecolor=t.ink, linewidth=1.2))
+                a.plot([0.025], [y - 0.03], marker="o", ms=11, mfc=t.ink if filled else "white", mec=t.ink, mew=1.2, ls="none", transform=a.transAxes)
                 _txt(a, 0.025, y - 0.03, str(r.rank), fontsize=7.5, fontweight="bold", color="white" if filled else t.ink, ha="center", va="center")
                 _txt(a, 0.085, y - 0.03, r.zip, fontsize=9.5, fontweight="bold", color=t.ink, va="center")
                 span = vmax - vmin or 1
@@ -147,4 +147,4 @@ class SourceNote(MapElement):
         txt = (f"Data: Redfin Data Center, ZIP-code market tracker (all residential, rolling 3-month windows), updated {c.dataset.last_updated()}. "
                "Boundaries: US Census Bureau ZIP Code Tabulation Areas (2010) and county outlines. Newer ZIPs without a 2010 area are not drawn. "
                "Map: Real Estate Maps (github.com/matthew-lottly/Real-Estate-Maps).")
-        _txt(a, 0, 1.0, txt, fontsize=6.8, color=t.faint, va="top", wrap=True)
+        _txt(a, 0, 1.0, textwrap.fill(txt, 98), fontsize=6.4, color=t.faint, va="top", linespacing=1.3)

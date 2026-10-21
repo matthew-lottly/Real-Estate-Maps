@@ -63,7 +63,7 @@ class ForecastMap(CommercialMap):
         ly = D.bt["horizons"][str(h)]["years"][-1]
         pg = Page(b, "Houston Investment Forecast", f"Expected {h}-month price-per-sq-ft growth vs the typical ZIP  ·  forecast from {pd.Period(D.origin).strftime('%B %Y')}",
                   SRC_COMMON.format(ly=ly), _stamp(c))
-        ax = pg.map_axes((0.03, 0.07, 0.60, 0.835), to_xy(-95.42, 29.78), 112_000)
+        ax = pg.map_axes((0.03, 0.16, 0.60, 0.745), to_xy(-95.42, 29.78), 112_000)
         base = BaseMap(c, pg)
         base.water_land(ax, counties=False)
         g = D.gdf.copy()
@@ -92,22 +92,20 @@ class ForecastMap(CommercialMap):
                 pg.badge(ax, (pt.x, pt.y), str(i + 1), color=b.primary, r_frac=0.011, fs=6.8, zorder=30)
         pg.north_arrow(ax)
         pg.scale_bar(ax)
-        # legend (inside map, bottom right)
-        x0, y0, x1, y1 = pg.extent(ax)
-        W, H = x1 - x0, y1 - y0
-        lx, ly_ = x1 - W * 0.30, y0 + H * 0.045
-        with pg.layer("legend", ax):
-            ax.add_patch(Rectangle((lx - W * 0.012, ly_ - H * 0.02), W * 0.31, H * 0.245, fc="white", alpha=0.9, ec="none", zorder=40))
-            ax.text(lx, ly_ + H * 0.2, f"EXPECTED {h}-MO GROWTH vs TYPICAL ZIP", fontsize=5.8, fontweight="bold", color=b.primary, zorder=41)
-            labs = ["below -8%", "-8 to -4%", "-4 to -1.5%", "within ±1.5%", "+1.5 to +4%", "+4 to +8%", "above +8%"]
-            for i, (cc, ll) in enumerate(zip(pal, labs)):
-                ax.add_patch(Rectangle((lx + i * W * 0.04, ly_ + H * 0.12), W * 0.04, H * 0.04, fc=cc, ec="white", zorder=41))
-            ax.text(lx, ly_ + H * 0.105, "weaker", fontsize=5.2, color=b.muted, va="top", zorder=41)
-            ax.text(lx + 7 * W * 0.04, ly_ + H * 0.105, "stronger", fontsize=5.2, color=b.muted, va="top", ha="right", zorder=41)
-            ax.add_patch(Rectangle((lx, ly_ + H * 0.045), W * 0.035, H * 0.03, fc="#9AA5B1", ec="#1B2430", hatch="////", lw=0.2, zorder=41))
-            ax.text(lx + W * 0.045, ly_ + H * 0.06, "wider forecast range (least certain third)", fontsize=5.4, color=b.ink, va="center", zorder=41)
-            ax.add_patch(Rectangle((lx, ly_ + H * 0.0), W * 0.035, H * 0.03, fc="#9AA5B1", alpha=0.42, ec="none", zorder=41))
-            ax.text(lx + W * 0.045, ly_ + H * 0.015, "thin market (<50 sales per quarter)", fontsize=5.4, color=b.ink, va="center", zorder=41)
+        # legend strip under the map (never covers a pick)
+        lg = pg.fig.add_axes((0.03, 0.07, 0.60, 0.075))
+        lg.set_xlim(0, 1); lg.set_ylim(0, 1); lg.set_axis_off()
+        lg.text(0.0, 0.93, f"EXPECTED {h}-MONTH GROWTH vs THE TYPICAL ZIP", fontsize=6, fontweight="bold", color=b.primary, va="top")
+        sw = 0.062
+        for i, cc in enumerate(pal):
+            lg.add_patch(Rectangle((i * sw, 0.30), sw, 0.24, fc=cc, ec="white", lw=1.0))
+        for i, ll in enumerate(["below -8%", "-8 to -4", "-4 to -1.5", "±1.5%", "+1.5 to +4", "+4 to +8", "above +8%"]):
+            lg.text(i * sw + sw / 2, 0.18, ll, fontsize=4.9, color=b.ink, ha="center", va="top")
+        lg.add_patch(Rectangle((0.47, 0.30), 0.03, 0.24, fc="#9AA5B1", ec="#1B2430", hatch="////", lw=0.2))
+        lg.text(0.51, 0.42, "wider forecast range (least certain third)", fontsize=5.4, color=b.ink, va="center")
+        lg.add_patch(Rectangle((0.47, 0.0), 0.03, 0.2, fc="#9AA5B1", alpha=0.42, ec="none"))
+        lg.text(0.51, 0.10, "thin market (<50 sales per quarter)", fontsize=5.4, color=b.ink, va="center")
+        lg.text(0.0, 0.62, "weaker", fontsize=4.9, color=b.muted, va="center", ha="left"); lg.text(7 * sw, 0.62, "stronger", fontsize=4.9, color=b.muted, va="center", ha="right")
         # right panel: shortlist
         pan = pg.panel((0.645, 0.07, 0.325, 0.835), f"Top 10 investable ZIPs · {h}-month outlook")
         pan.text(0.04, 0.905, "ZIP / area", fontsize=5.6, color=b.muted, fontweight="bold", va="center", transform=pan.transAxes)
@@ -153,7 +151,7 @@ class RiskReturnMap(CommercialMap):
         D = InvestorData(c)
         ly = D.bt["horizons"][str(h)]["years"][-1]
         pg = Page(b, "Risk vs Return", f"Where expected outperformance is high and the forecast is firm  ·  {h}-month outlook from {pd.Period(D.origin).strftime('%B %Y')}", SRC_COMMON.format(ly=ly), _stamp(c))
-        ax = pg.map_axes((0.03, 0.07, 0.56, 0.835), to_xy(-95.42, 29.78), 100_000)
+        ax = pg.map_axes((0.03, 0.16, 0.56, 0.745), to_xy(-95.42, 29.78), 100_000)
         base = BaseMap(c, pg)
         base.water_land(ax, counties=False)
         g = D.gdf.copy()
@@ -169,7 +167,8 @@ class RiskReturnMap(CommercialMap):
         base.roads(ax, label=False, scale=0.5)
         prime = inv[(inv["xc"] == 2) & (inv["yc"] == 0)].sort_values(f"rel_{h}_pct", ascending=False)
         x0_, y0_, x1_, y1_ = pg.extent(ax)
-        prime = prime[[x0_ < p.x < x1_ and y0_ < p.y < y1_ for p in prime.geometry.representative_point()]]
+        mx_, my_ = (x1_ - x0_) * 0.05, (y1_ - y0_) * 0.05
+        prime = prime[[x0_ + mx_ < p.x < x1_ - mx_ and y0_ + my_ < p.y < y1_ - my_ for p in prime.geometry.representative_point()]]
         with pg.layer("prime-targets", ax):
             for i, (_, r) in enumerate(prime.iterrows(), 1):
                 pt = r.geometry.representative_point()
@@ -180,21 +179,20 @@ class RiskReturnMap(CommercialMap):
                 ax.plot(pt.x, pt.y, marker="v", ms=4.5, mfc="#1B2430", mec="white", mew=0.5, zorder=29)
         pg.north_arrow(ax)
         pg.scale_bar(ax)
-        # legend matrix (own white box, bottom-left of the map)
-        lg = pg.fig.add_axes((0.04, 0.085, 0.225, 0.15))
-        lg.set_xlim(-2.6, 6.8); lg.set_ylim(-1.5, 4.3); lg.set_axis_off()
-        lg.add_patch(Rectangle((-2.6, -1.5), 9.4, 5.8, fc="white", alpha=0.95, ec="none"))
+        # legend strip under the map: 3x3 matrix + key
+        lg = pg.fig.add_axes((0.03, 0.07, 0.56, 0.075))
+        lg.set_xlim(0, 11.0); lg.set_ylim(-0.5, 3.4); lg.set_axis_off()
         for xi in range(3):
             for yi in range(3):
-                lg.add_patch(Rectangle((xi, 2 - yi), 1, 1, fc=BIVAR[yi][xi], ec="white", lw=1.2))
-        lg.text(1.5, -0.15, "expected outperformance  →", ha="center", va="top", fontsize=5.2, color=b.ink)
-        lg.text(-1.55, 1.5, "forecast uncertainty  →", rotation=90, ha="center", va="center", fontsize=5.2, color=b.ink)
-        lg.text(-0.15, 2.5, "firm", ha="right", va="center", fontsize=4.8, color=b.muted); lg.text(-0.15, 0.5, "wide", ha="right", va="center", fontsize=4.8, color=b.muted)
-        lg.text(0.5, 3.1, "lower", ha="center", fontsize=4.8, color=b.muted); lg.text(2.5, 3.1, "higher", ha="center", fontsize=4.8, color=b.muted)
-        lg.add_patch(Circle((3.85, 2.55), 0.22, fc=b.alert, ec="white"))
-        lg.text(4.2, 2.55, "prime target:\nhigh return,\nfirm forecast", fontsize=4.9, color=b.ink, va="center", linespacing=1.3)
-        lg.plot([3.85], [0.9], marker="v", ms=4, color="#1B2430", ls="none")
-        lg.text(4.2, 0.9, "low-lying ZIP\n(p10 elev < 8 m):\ncheck flood risk", fontsize=4.9, color=b.ink, va="center", linespacing=1.3)
+                lg.add_patch(Rectangle((2.2 + xi * 0.78, 0.2 + (2 - yi) * 0.78), 0.78, 0.78, fc=BIVAR[yi][xi], ec="white", lw=1.0))
+        lg.text(2.2 + 1.17, 0.12, "expected outperformance  →", ha="center", va="top", fontsize=4.8, color=b.ink)
+        lg.text(2.1, 1.6, "firm", ha="right", va="center", fontsize=4.8, color=b.muted); lg.text(2.1, 0.55, "wide", ha="right", va="center", fontsize=4.8, color=b.muted)
+        lg.text(0.0, 1.6, "forecast\nuncertainty", ha="left", va="center", fontsize=4.9, color=b.ink, linespacing=1.2)
+        lg.text(0.0, 2.95, "RETURN vs CERTAINTY (INVESTABLE ZIPS)", fontsize=6, fontweight="bold", color=b.primary, va="center")
+        lg.plot([5.4], [2.0], marker="o", ms=7, color=b.alert, mec="none", ls="none")
+        lg.text(5.65, 2.0, "prime target: high return, firm forecast", fontsize=5.2, color=b.ink, va="center")
+        lg.plot([5.4], [0.9], marker="v", ms=5, color="#1B2430", mec="none", ls="none")
+        lg.text(5.65, 0.9, "low-lying ZIP (10th-percentile elevation < 8 m): check flood risk", fontsize=5.2, color=b.ink, va="center")
         # right column: scatter, prime list, payoff
         sc = pg.fig.add_axes((0.655, 0.615, 0.305, 0.225))
         sc.scatter(inv[f"rel_{h}_pct"], inv[f"width_{h}_pct"], s=9, c=[BIVAR[a_][b_] for a_, b_ in zip(inv["yc"], inv["xc"])], edgecolors="#1B2430", linewidths=0.3, zorder=3)

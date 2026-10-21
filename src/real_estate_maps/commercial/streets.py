@@ -31,15 +31,17 @@ class OvertureStreets:
             OvertureStreets._cache = g
         return OvertureStreets._cache
 
-    def draw(self, page, ax, brand, label: bool = True) -> None:
+    def draw(self, page, ax, brand, label: bool = True, light: bool = False) -> None:
         x0, y0, x1, y1 = page.extent(ax)
         W = x1 - x0
         n_classes = next(n for w, n in MIN_CLASS_BY_WIDTH_M if W >= w)
+        if light:
+            n_classes = min(n_classes, 3)          # underlay for choropleths: motorways, trunks and primaries only
         g = self.frame()
         view = box(x0, y0, x1, y1)
         sub = g.iloc[g.sindex.query(view, predicate="intersects")]
         sub = sub[sub["cls"].isin(ORDER[:n_classes])]
-        scale = 1.0 if W > 8000 else 1.35
+        scale = (1.0 if W > 8000 else 1.35) * (0.55 if light else 1.0)
         with page.layer("streets", ax):
             for cls in reversed(ORDER[:n_classes]):
                 s = sub[sub["cls"] == cls]
@@ -65,6 +67,9 @@ class OvertureStreets:
                     if best is None or best.length < W * 0.07:
                         continue
                     p = best.interpolate(0.5, normalized=True)
+                    H = y1 - y0
+                    if (p.x > x1 - 0.14 * W and p.y > y1 - 0.20 * H) or (p.x < x0 + 0.27 * W and p.y < y0 + 0.19 * H):
+                        continue                                  # keep clear of the north arrow and scale bar
                     if any(np.hypot(p.x - q[0], p.y - q[1]) < W * 0.12 for q in placed):
                         continue
                     a = best.interpolate(0.45, normalized=True)

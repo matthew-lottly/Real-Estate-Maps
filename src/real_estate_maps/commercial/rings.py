@@ -44,7 +44,7 @@ class DemographicRingsMap(CommercialMap):
             c.zips.boundary.plot(ax=ax, color="#BDB6A8", lw=0.5, zorder=2)
         tints = {5: b.secondary, 3: b.secondary, 1: b.secondary}
         alphas = {5: 0.10, 3: 0.14, 1: 0.20}
-        base.streets(ax, label=False)
+        base.streets(ax, label=False, light=True)
         with pg.layer("rings", ax):
             for mi in sorted(self.RINGS, reverse=True):
                 ax.add_patch(Circle((sx, sy), mi * M_PER_MI, fc=tints[mi], alpha=alphas[mi], ec="none", zorder=4))

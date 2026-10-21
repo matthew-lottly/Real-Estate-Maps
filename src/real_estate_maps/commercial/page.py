@@ -36,6 +36,7 @@ class Page:
         matplotlib.rcParams["pdf.fonttype"] = 42
         self.fig = plt.figure(figsize=(W_IN, H_IN), dpi=DPI, facecolor=brand.paper)
         self.ax: plt.Axes | None = None
+        self.issues: list[str] = []
         self._n = 0
         self._header()
         self._footer()
@@ -64,9 +65,9 @@ class Page:
         a = f.add_axes((0, 0, 1, 0.05))
         a.set_axis_off()
         a.plot([0.03, 0.97], [0.98, 0.98], color=b.muted, lw=0.5, alpha=0.5, transform=a.transAxes)
-        a.text(0.03, 0.80, textwrap.fill(self.source, 190), fontsize=5.6, color=b.muted, va="top", linespacing=1.25, transform=a.transAxes)
+        a.text(0.03, 0.86, textwrap.fill(self.source, 215), fontsize=5.2, color=b.muted, va="top", linespacing=1.18, transform=a.transAxes)
         if self.stamp:
-            a.text(0.97, 0.80, self.stamp, fontsize=6.2, color=b.alert, fontweight="bold", ha="right", va="top", transform=a.transAxes)
+            a.text(0.97, 0.86, self.stamp, fontsize=6.0, color=b.alert, fontweight="bold", ha="right", va="top", transform=a.transAxes)
         a.set_gid("footer")
 
     # ---- map axes ----
@@ -132,6 +133,12 @@ class Page:
                 ax.text(bx + i * seg_len * unit_m, by + h * 1.6, f"{i * seg_len:g}", fontsize=6, ha="center", va="bottom", color=self.brand.ink, zorder=31)
             ax.text(bx + L + W * 0.008, by + h / 2, "miles" if unit == "mi" else "feet", fontsize=6, va="center", color=self.brand.ink, zorder=31)
 
+    def in_furniture(self, ax, x: float, y: float) -> bool:
+        """True when a point sits under the north arrow or scale bar (labels should be skipped there)."""
+        x0, y0, x1, y1 = self.extent(ax)
+        W, H = x1 - x0, y1 - y0
+        return (x > x1 - 0.14 * W and y > y1 - 0.20 * H) or (x < x0 + 0.27 * W and y < y0 + 0.19 * H)
+
     def site_pin(self, ax, xy, label: str | None = None, size=11, dx=9, dy=9, ha="left") -> None:
         with self.layer("site-marker", ax):
             ax.plot(*xy, marker="*", ms=size * 1.7, mfc=self.brand.alert, mec="white", mew=1.2, zorder=40)
@@ -169,6 +176,8 @@ class Page:
         for a in self.fig.axes:
             a.set_xlabel("")
             a.set_ylabel("")
+        from .qa import audit
+        self.issues = audit(self.fig)
         outdir.mkdir(parents=True, exist_ok=True)
         paths = {k: outdir / f"{stem}.{k}" for k in ("png", "pdf", "svg")}
         self.fig.savefig(paths["png"], dpi=DPI, facecolor=self.brand.paper)

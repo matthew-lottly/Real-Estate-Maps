@@ -37,7 +37,7 @@ class NeighborhoodMap(CommercialMap):
             if len(nd):
                 nd.plot(ax=ax, fc="#E4E6E9", ec="#B3BAC3", hatch="////", lw=0.3, zorder=2)
                 nd.boundary.plot(ax=ax, color="white", lw=0.9, zorder=2.1)
-        base.streets(ax, label=False)
+        base.streets(ax, label=False, light=True)
         x0, y0, x1, y1 = pg.extent(ax)
         view = box(x0, y0, x1, y1).buffer(-0.04 * (x1 - x0))
         rows = []
@@ -47,6 +47,8 @@ class NeighborhoodMap(CommercialMap):
                 if p.is_empty or p.area < r.geometry.area * 0.25:
                     continue
                 pt = p.representative_point()
+                if pg.in_furniture(ax, pt.x, pt.y):
+                    continue
                 ax.text(pt.x, pt.y + (y1 - y0) * 0.008, r["zip"], fontsize=7, fontweight="bold", color=b.ink, ha="center", va="bottom", zorder=15, path_effects=halo("white", 2.6))
                 if r["ok"]:
                     ax.text(pt.x, pt.y - (y1 - y0) * 0.004, m.short(r[m.column]), fontsize=6.4, color=b.ink, ha="center", va="top", zorder=15, path_effects=halo("white", 2.4))

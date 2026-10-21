@@ -105,6 +105,8 @@ class CommandLineApp:
         for k in (maps if a.map == "all" else [a.map]):
             out = maps[k](ctx).export(paths.output / "commercial")
             C.print(f"[green]✔[/green] {out['png']}")
+            for i in out["issues"]:
+                C.print(f"   [yellow]layout:[/yellow] {i}", highlight=False)
         return 0
 
 
